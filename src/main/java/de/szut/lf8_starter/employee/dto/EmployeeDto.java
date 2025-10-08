@@ -9,6 +9,7 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class EmployeeDto {
 
+
     private Long id;
     private List<String> qualifications;
 
