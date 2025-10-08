@@ -16,5 +16,13 @@ client_id = {{client_id}} &
 scope = openid
 
 ###
+# curl -X POST "https://authentik.szut.dev/application/o/token/";
+#  -H "Content-Type: application/x-www-form-urlencoded"
+#  -d "grant_type=client_credentials"
+#  -d "username=john"
+#  -d "password=nt7su3vuTaxtsmKdlhr2RCbRD4tis5i7zBFJbbTWyeTjrRqTpQ513z73ZlV3"
+#  -d "client_id=hitec_api_client"
+#  -d "scope=openid"
+
 
 
