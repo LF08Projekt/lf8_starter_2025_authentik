@@ -2,7 +2,6 @@ package de.szut.lf8_starter.project;
 
 import de.szut.lf8_starter.project.dto.ProjectCreateDto;
 import de.szut.lf8_starter.project.dto.ProjectGetDto;
-import de.szut.lf8_starter.project.dto.ProjectUpdateDto;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -36,19 +35,4 @@ public class ProjectMapper {
         newDto.setProjectEmployeesIds(entity.getProjectEmployeesIds());
         return newDto;
     }
-    public ProjectEntity mapUpdateDtoToEntity(ProjectUpdateDto updateDto,Long projectId){
-        ProjectEntity projectToUpdate = new ProjectEntity();
-        projectToUpdate.setProjectId(projectId);
-        projectToUpdate.setName(updateDto.getName());
-        projectToUpdate.setCustomerId(updateDto.getCustomerId());
-        projectToUpdate.setResponsibleCustomerName(updateDto.getResponsibleCustomerName());
-        projectToUpdate.setResponsibleEmployeeId(updateDto.getResponsibleEmployeeId());
-        projectToUpdate.setStartDate(updateDto.getStartDate());
-        projectToUpdate.setPlannedEndDate(updateDto.getPlannedEndDate());
-        projectToUpdate.setActualEndDate(updateDto.getActualEndDate());
-        projectToUpdate.setComment(updateDto.getComment());
-        projectToUpdate.setProjectEmployeesIds(updateDto.getProjectEmployeesIds());
-        return projectToUpdate;
-    }
-
 }

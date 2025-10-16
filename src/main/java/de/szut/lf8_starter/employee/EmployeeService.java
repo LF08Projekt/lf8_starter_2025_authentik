@@ -8,7 +8,6 @@ import org.springframework.web.client.RestTemplate;
 @Service
 public class EmployeeService {
 
-
     private final RestTemplate restTemplate;
     private String baseUrl = "https://employee-api.szut.dev/";
 
@@ -33,10 +32,7 @@ public class EmployeeService {
             return null;
         } catch (Exception e) {
             return null;
-
         }
     }
-
-
 }
 
