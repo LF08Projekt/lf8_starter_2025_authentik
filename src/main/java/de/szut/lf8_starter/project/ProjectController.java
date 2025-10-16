@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 @RestController
-@RequestMapping(value = "/project/")
+@RequestMapping(value = "/projects")
 public class ProjectController {
     private final ProjectMapper projectMapper;
     private final ProjectService projectService;
@@ -32,7 +32,7 @@ public class ProjectController {
         }
         try {
             projectEntity = this.projectService.create(projectEntity);
-        }catch (ResourceNotFoundException exception){
+        } catch (ResourceNotFoundException exception) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, exception.getMessage());
         }
         return this.projectMapper.mapEntityToGetDto(projectEntity);
