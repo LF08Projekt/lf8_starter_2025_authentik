@@ -15,5 +15,4 @@ public class ProjectService {
     public ProjectEntity create(ProjectEntity projectEntity){
         return  projectRepository.save(projectEntity);
     }
-
 }

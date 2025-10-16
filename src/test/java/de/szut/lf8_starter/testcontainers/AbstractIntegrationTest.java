@@ -35,6 +35,4 @@ public class AbstractIntegrationTest {
         helloRepository.deleteAll();
         projectRepository.deleteAll();
     }
-
-
 }
