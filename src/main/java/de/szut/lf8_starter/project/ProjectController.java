@@ -2,16 +2,17 @@ package de.szut.lf8_starter.project;
 
 import de.szut.lf8_starter.employee.EmployeeService;
 import de.szut.lf8_starter.exceptionHandling.EmployeeNotFoundException;
-import de.szut.lf8_starter.exceptionHandling.ResourceNotFoundException;
 import de.szut.lf8_starter.project.dto.ProjectCreateDto;
 import de.szut.lf8_starter.project.dto.ProjectGetDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import jakarta.validation.Valid;
+
 
 @RestController
 @RequestMapping(value = "/projects")
-public class ProjectController {
+public class ProjectController implements ProjectControllerOpenAPI{
     private final ProjectMapper projectMapper;
     private final ProjectService projectService;
     private final EmployeeService employeeService;
@@ -24,8 +25,7 @@ public class ProjectController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ProjectGetDto create(@RequestBody ProjectCreateDto projectCreateDto) {
-        long i = 0L;
+    public ProjectGetDto create(@RequestBody @Valid ProjectCreateDto projectCreateDto) {
 
         ProjectEntity projectEntity = this.projectMapper.mapCreateDtoToEntity(projectCreateDto);
 
@@ -47,5 +47,4 @@ public class ProjectController {
 
         return this.projectMapper.mapEntityToGetDto(projectEntity);
     }
-
 }
