@@ -3,6 +3,7 @@ package de.szut.lf8_starter.project;
 import de.szut.lf8_starter.employee.EmployeeService;
 import de.szut.lf8_starter.exceptionHandling.EmployeeNotFoundException;
 import de.szut.lf8_starter.exceptionHandling.ProjectNotFoundException;
+import de.szut.lf8_starter.exceptionHandling.ResourceNotFoundException;
 import de.szut.lf8_starter.project.dto.ProjectCreateDto;
 import de.szut.lf8_starter.project.dto.ProjectGetDto;
 import de.szut.lf8_starter.project.dto.ProjectUpdateDto;
@@ -95,7 +96,7 @@ public class ProjectController implements ProjectControllerOpenAPI {
                     projectMapper.mapUpdateDtoToEntity(projectUpdateDto,
                             projectId);
             ProjectEntity finalProjectEntity =
-                    projectService.update(updatedProjectEntity);
+                    projectService.update(projectId, updatedProjectEntity);
             return projectMapper.mapEntityToGetDto(finalProjectEntity);
         } catch (ProjectNotFoundException exception) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, exception.getMessage());
