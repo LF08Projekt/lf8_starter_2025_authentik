@@ -76,21 +76,23 @@ public class UpdateIT extends AbstractIntegrationTest {
                         ":00.000+00:00")))
                 .andReturn();
     }
+
+
     @Test
     @WithMockUser(roles = "user")
     void updateProjectNotFoundWithWrongId() throws Exception {
         String updatedProject = """
-            {
-              "name": "DoesNotExist",
-              "responsibleEmployeeId": 2,
-              "customerId": 1,
-              "responsibleCustomerName": "Jan",
-              "comment": "nichts",
-              "startDate": "2025-12-10",
-              "plannedEndDate": "2027-12-13",
-              "actualEndDate": "2025-12-14"
-            }
-            """;
+                {
+                  "name": "DoesNotExist",
+                  "responsibleEmployeeId": 2,
+                  "customerId": 1,
+                  "responsibleCustomerName": "Jan",
+                  "comment": "nichts",
+                  "startDate": "2025-12-10",
+                  "plannedEndDate": "2027-12-13",
+                  "actualEndDate": "2025-12-14"
+                }
+                """;
 
         this.mockMvc.perform(put("/projects/9876")
                         .with(jwt())
@@ -98,9 +100,8 @@ public class UpdateIT extends AbstractIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(updatedProject))
                 .andExpect(status().isNotFound())
-                .andExpect(content().string(containsString("ProjectEntity not found on id = 9876")));
+                .andExpect(status().reason(containsString("ProjectEntity not found on id = 9876")));
     }
-
 }
 
 
