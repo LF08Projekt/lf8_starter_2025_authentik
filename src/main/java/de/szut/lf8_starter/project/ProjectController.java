@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import jakarta.validation.Valid;
 
+import java.util.List;
+
 
 @RestController
 @RequestMapping(value = "/projects")
@@ -102,4 +104,11 @@ public class ProjectController implements ProjectControllerOpenAPI {
         }
     }
 
+    @GetMapping
+    public List<ProjectGetDto> findAllProjects() {
+        return this.projectService.readAll()
+                .stream()
+                .map(this.projectMapper::mapEntityToGetDto)
+                .toList();
+    }
 }

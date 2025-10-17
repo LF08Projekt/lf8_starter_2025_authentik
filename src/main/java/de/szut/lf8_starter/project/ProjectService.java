@@ -2,8 +2,10 @@ package de.szut.lf8_starter.project;
 
 import de.szut.lf8_starter.employee.EmployeeService;
 import de.szut.lf8_starter.exceptionHandling.ProjectNotFoundException;
+import de.szut.lf8_starter.hello.HelloEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -26,9 +28,14 @@ public class ProjectService {
         return optionalQualifications.orElse(null);
     }
 
+    public List<ProjectEntity> readAll() {
+        return this.projectRepository.findAll();
+    }
+
     public void delete(ProjectEntity entity) {
         this.projectRepository.delete(entity);
     }
+
     public ProjectEntity update(Long id, ProjectEntity incoming) {
         var existingOpt = projectRepository.findById(id);
         if (existingOpt.isEmpty()) {
@@ -48,22 +55,4 @@ public class ProjectService {
 
         return projectRepository.save(existing);
     }
-
-    /*public ProjectEntity update(ProjectEntity project) {
-        ProjectEntity updatedProject = readById(project.getProjectId());
-
-        updatedProject.setName(project.getName());
-        updatedProject.setResponsibleEmployeeId(project.getResponsibleEmployeeId());
-        updatedProject.setCustomerId(project.getCustomerId());
-        updatedProject.setResponsibleCustomerName(project.getResponsibleCustomerName());
-        updatedProject.setComment(project.getComment());
-        updatedProject.setStartDate(project.getStartDate());
-        updatedProject.setPlannedEndDate(project.getPlannedEndDate());
-        updatedProject.setActualEndDate(project.getActualEndDate());
-        updatedProject.setProjectEmployeesIds(project.getProjectEmployeesIds());
-
-        updatedProject = this.projectRepository.save(updatedProject);
-        return updatedProject;
-    }*/
-
 }
