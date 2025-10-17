@@ -3,9 +3,9 @@ package de.szut.lf8_starter.project;
 import de.szut.lf8_starter.employee.EmployeeService;
 import de.szut.lf8_starter.exceptionHandling.EmployeeNotFoundException;
 import de.szut.lf8_starter.exceptionHandling.ProjectNotFoundException;
-import de.szut.lf8_starter.exceptionHandling.ResourceNotFoundException;
 import de.szut.lf8_starter.project.dto.ProjectCreateDto;
 import de.szut.lf8_starter.project.dto.ProjectGetDto;
+import de.szut.lf8_starter.project.dto.ProjectUpdateDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -65,4 +65,41 @@ public class ProjectController implements ProjectControllerOpenAPI {
             this.projectService.delete(entity);
         }
     }
+
+    @PutMapping("/{id}")
+    public ProjectGetDto updateProject(
+            @PathVariable("id") long projectId,
+            @RequestBody @Valid ProjectUpdateDto projectUpdateDto) {
+        ProjectEntity projectEntity =
+                this.projectMapper.mapUpdateDtoToEntity(projectUpdateDto, projectId);
+
+        if (projectEntity == null) {
+            throw new ProjectNotFoundException("ProjectEntity not found on " +
+                    "id = " + projectId);
+        }
+        if (!employeeService.isEmployeeValid(projectEntity.getResponsibleEmployeeId())) {
+            throw new EmployeeNotFoundException("Employee with Id " +
+                    projectEntity.getResponsibleEmployeeId() + "doesnt exist");
+        }
+        if (projectEntity.getProjectEmployeesIds() != null) {
+            for (Long employeeId : projectEntity.getProjectEmployeesIds()) {
+                if (!employeeService.isEmployeeValid(employeeId)) {
+                    throw new EmployeeNotFoundException(
+                            "Employee with Id " + employeeId +
+                                    " doesn't exist");
+                }
+            }
+        }
+        try {
+            ProjectEntity updatedProjectEntity =
+                    projectMapper.mapUpdateDtoToEntity(projectUpdateDto,
+                            projectId);
+            ProjectEntity finalProjectEntity =
+                    projectService.update(updatedProjectEntity);
+            return projectMapper.mapEntityToGetDto(finalProjectEntity);
+        } catch (ProjectNotFoundException exception) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, exception.getMessage());
+        }
+    }
+
 }
