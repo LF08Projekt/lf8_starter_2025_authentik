@@ -2,6 +2,7 @@ package de.szut.lf8_starter.project;
 
 import de.szut.lf8_starter.employee.EmployeeService;
 import de.szut.lf8_starter.exceptionHandling.EmployeeNotFoundException;
+import de.szut.lf8_starter.exceptionHandling.ProjectNotFoundException;
 import de.szut.lf8_starter.exceptionHandling.ResourceNotFoundException;
 import de.szut.lf8_starter.project.dto.ProjectCreateDto;
 import de.szut.lf8_starter.project.dto.ProjectGetDto;
@@ -58,7 +59,7 @@ public class ProjectController implements ProjectControllerOpenAPI {
     public void deleteProjectById(@PathVariable long id) {
         var entity = this.projectService.readById(id);
         if (entity == null) {
-            throw new ResourceNotFoundException("ProjectEntity not found on " +
+            throw new ProjectNotFoundException("ProjectEntity not found on " +
                     "id = " + id);
         } else {
             this.projectService.delete(entity);
