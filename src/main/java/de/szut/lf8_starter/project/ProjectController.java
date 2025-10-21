@@ -100,7 +100,8 @@ public class ProjectController implements ProjectControllerOpenAPI {
                     projectService.update(projectId, updatedProjectEntity);
             return projectMapper.mapEntityToGetDto(finalProjectEntity);
         } catch (ProjectNotFoundException exception) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, exception.getMessage());
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    exception.getMessage());
         }
     }
 
@@ -110,5 +111,11 @@ public class ProjectController implements ProjectControllerOpenAPI {
                 .stream()
                 .map(this.projectMapper::mapEntityToGetDto)
                 .toList();
+    }
+
+    @GetMapping("/{id}")
+    public ProjectGetDto findProjectById(@PathVariable("id") long projectId) {
+        return this.projectMapper.mapEntityToGetDto(
+                this.projectService.readById(projectId));
     }
 }
