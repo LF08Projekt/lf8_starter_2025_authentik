@@ -115,7 +115,13 @@ public class ProjectController implements ProjectControllerOpenAPI {
 
     @GetMapping("/{id}")
     public ProjectGetDto findProjectById(@PathVariable("id") long projectId) {
-        return this.projectMapper.mapEntityToGetDto(
-                this.projectService.readById(projectId));
+        ProjectEntity projectEntity = this.projectService.readById(projectId);
+
+        if(projectEntity == null) {
+            throw new ProjectNotFoundException("ProjectEntity not found on id" +
+                    " = " + projectId);
+        }
+
+        return this.projectMapper.mapEntityToGetDto(projectEntity);
     }
 }
