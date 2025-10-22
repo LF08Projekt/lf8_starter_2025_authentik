@@ -37,7 +37,17 @@ public class GetAllIT  extends AbstractIntegrationTest {
                 .with(csrf()))
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(jsonPath("$", hasSize(2)))
-                .andExpect(jsonPath("$[0].message", is("Test Project 1")))
-                .andExpect(jsonPath("$[1].message", is("Test Project 2")));
+                .andExpect(jsonPath("$[0].name", is("Test Project 1")))
+                .andExpect(jsonPath("$[1].name", is("Test Project 2")));
+    }
+
+    @Test
+    @WithMockUser(roles = "user")
+    void findAllProjects_EmptyList() throws Exception {
+
+        this.mockMvc.perform(get("/projects")
+                        .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(0)));
     }
 }
