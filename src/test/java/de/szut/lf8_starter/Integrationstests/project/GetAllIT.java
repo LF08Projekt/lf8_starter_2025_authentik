@@ -20,14 +20,14 @@ public class GetAllIT  extends AbstractIntegrationTest {
     void findAllProjects() throws Exception {
 
         ProjectEntity project1 = new ProjectEntity();
-        project1.setName("Test Project 1");
+        project1.setName("Test 1");
         project1.setResponsibleEmployeeId(1L);
         project1.setCustomerId(1L);
         project1.setResponsibleCustomerName("Jan");
         projectRepository.save(project1);
 
         ProjectEntity project2 = new ProjectEntity();
-        project2.setName("Test Project 2");
+        project2.setName("Test 2");
         project2.setResponsibleEmployeeId(2L);
         project2.setCustomerId(2L);
         project2.setResponsibleCustomerName("Yana");
@@ -37,7 +37,17 @@ public class GetAllIT  extends AbstractIntegrationTest {
                 .with(csrf()))
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(jsonPath("$", hasSize(2)))
-                .andExpect(jsonPath("$[0].message", is("Test Project 1")))
-                .andExpect(jsonPath("$[1].message", is("Test Project 2")));
+                .andExpect(jsonPath("$[0].name", is("Test 1")))
+                .andExpect(jsonPath("$[1].name", is("Test 2")));
+    }
+
+    @Test
+    @WithMockUser(roles = "user")
+    void findAllProjects_EmptyList() throws Exception {
+
+        this.mockMvc.perform(get("/projects")
+                        .with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(0)));
     }
 }
