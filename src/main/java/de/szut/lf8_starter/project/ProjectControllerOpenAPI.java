@@ -9,6 +9,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
+import java.util.List;
+
 public interface ProjectControllerOpenAPI {
 
     @Operation(
@@ -63,5 +65,15 @@ public interface ProjectControllerOpenAPI {
             @ApiResponse(responseCode = "401", description = "not authorized",
                     content = @Content)})
     ProjectGetDto findProjectById(long projectId);
+
+    @Operation(summary = "lists all projects")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "projects listed" +
+                    " successfully",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ProjectGetDto.class))}),
+            @ApiResponse(responseCode = "401", description = "not authorized",
+                    content = @Content)})
+    List<ProjectGetDto> findAllProjects();
 
 }
