@@ -7,7 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @AllArgsConstructor
@@ -35,12 +35,12 @@ public class ProjectEntity {
     private String comment;
 
     @NotBlank(message = "Start date is mandatory!")
-    private Date startDate;
+    private LocalDate startDate;
 
     @NotNull(message = "End date is mandatory!")
-    private Date plannedEndDate;
+    private LocalDate plannedEndDate;
 
-    private Date actualEndDate;
+    private LocalDate actualEndDate;
 
     @ElementCollection
     private List<Long> projectEmployeesIds;

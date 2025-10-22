@@ -42,8 +42,8 @@ public class PostIT extends AbstractIntegrationTest {
                 .andExpect(jsonPath("$.customerId", is(1)))
                 .andExpect(jsonPath("$.responsibleCustomerName", is("Armin")))
                 .andExpect(jsonPath("$.comment", is("nichts")))
-                .andExpect(jsonPath("$.startDate", is("2025-12-12T00:00:00.000+00:00")))
-                .andExpect(jsonPath("$.plannedEndDate", is("2027-12-12T00:00:00.000+00:00")))
+                .andExpect(jsonPath("$.startDate", is("2025-12-12")))
+                .andExpect(jsonPath("$.plannedEndDate", is("2027-12-12")))
                 .andReturn()
                 .getResponse()
                 .getContentAsString();
@@ -57,7 +57,7 @@ public class PostIT extends AbstractIntegrationTest {
         assertThat(loadedEntity.get().getCustomerId()).isEqualTo(1L);
         assertThat(loadedEntity.get().getResponsibleCustomerName()).isEqualTo("Armin");
         assertThat(loadedEntity.get().getComment()).isEqualTo("nichts");
-        assertThat(loadedEntity.get().getStartDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()).isEqualTo(LocalDate.parse("2025-12-12"));
-        assertThat(loadedEntity.get().getPlannedEndDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate()).isEqualTo(LocalDate.parse("2027-12-12"));
+        assertThat(loadedEntity.get().getStartDate()).isEqualTo(LocalDate.parse("2025-12-12"));
+        assertThat(loadedEntity.get().getPlannedEndDate()).isEqualTo(LocalDate.parse("2027-12-12"));
     }
 }

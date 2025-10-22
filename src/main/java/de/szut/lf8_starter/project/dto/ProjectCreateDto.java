@@ -3,7 +3,9 @@ package de.szut.lf8_starter.project.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import org.springframework.cglib.core.Local;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -25,12 +27,12 @@ public class ProjectCreateDto {
     private String comment;
 
     @NotNull(message ="Startdate is mandatory!")
-    private Date startDate;
+    private LocalDate startDate;
 
     @NotNull(message = "PlannedEndDate is mandatory!")
-    private Date plannedEndDate;
+    private LocalDate plannedEndDate;
 
-    private Date actualEndDate;
+    private LocalDate actualEndDate;
 
     @NotNull
     private List<Long> projectEmployeesIds;

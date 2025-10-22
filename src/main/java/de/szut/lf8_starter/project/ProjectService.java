@@ -2,7 +2,6 @@ package de.szut.lf8_starter.project;
 
 import de.szut.lf8_starter.employee.EmployeeService;
 import de.szut.lf8_starter.exceptionHandling.ProjectNotFoundException;
-import de.szut.lf8_starter.hello.HelloEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

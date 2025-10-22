@@ -53,4 +53,15 @@ public interface ProjectControllerOpenAPI {
                     content = @Content)})
     ProjectGetDto updateProject(long id, ProjectUpdateDto projectUpdateDto);
 
+    @Operation(summary = "finds a project by its id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "project found",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ProjectGetDto.class))}),
+            @ApiResponse(responseCode = "404", description = "project not found",
+                    content = @Content),
+            @ApiResponse(responseCode = "401", description = "not authorized",
+                    content = @Content)})
+    ProjectGetDto findProjectById(long projectId);
+
 }
