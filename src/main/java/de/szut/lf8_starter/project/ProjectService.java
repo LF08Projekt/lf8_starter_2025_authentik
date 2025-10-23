@@ -1,9 +1,11 @@
 package de.szut.lf8_starter.project;
 
 import de.szut.lf8_starter.employee.EmployeeService;
+import de.szut.lf8_starter.exceptionHandling.EmployeeNotFoundException;
 import de.szut.lf8_starter.exceptionHandling.ProjectNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,5 +55,43 @@ public class ProjectService {
         existing.setActualEndDate(incoming.getActualEndDate());
 
         return projectRepository.save(existing);
+    }
+
+    public ProjectEntity addEmployeeToProject(Long projectId, Long employeeId) {
+        ProjectEntity project = readById(projectId);
+        if (project == null) {
+            throw new ProjectNotFoundException("ProjectEntity not found on id = " + projectId);
+        }
+
+        if (employeeService.isEmployeeValid(employeeId)) {
+            throw new EmployeeNotFoundException("Employee with Id " + employeeId + " doesn't exist");
+        }
+
+        if (project.getProjectEmployeesIds() == null) {
+            project.setProjectEmployeesIds(new ArrayList<>());
+        }
+
+        if (project.getProjectEmployeesIds().contains(employeeId)) {
+            throw new IllegalArgumentException("Employee with Id " + employeeId + " is already assigned to this project");
+        }
+
+        project.getProjectEmployeesIds().add(employeeId);
+
+        return projectRepository.save(project);
+    }
+
+    public ProjectEntity removeEmployeeFromProject(Long projectId, Long employeeId) {
+        ProjectEntity project = readById(projectId);
+        if (project == null) {
+            throw new ProjectNotFoundException("ProjectEntity not found on id = " + projectId);
+        }
+
+        if (project.getProjectEmployeesIds() == null || !project.getProjectEmployeesIds().contains(employeeId)) {
+            throw new IllegalArgumentException("Employee with Id " + employeeId + " is not assigned to this project");
+        }
+
+        project.getProjectEmployeesIds().remove(employeeId);
+
+        return projectRepository.save(project);
     }
 }

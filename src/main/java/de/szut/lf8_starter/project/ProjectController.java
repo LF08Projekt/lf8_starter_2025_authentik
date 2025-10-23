@@ -35,13 +35,13 @@ public class ProjectController implements ProjectControllerOpenAPI {
         ProjectEntity projectEntity =
                 this.projectMapper.mapCreateDtoToEntity(projectCreateDto);
 
-        if (!employeeService.isEmployeeValid(projectEntity.getResponsibleEmployeeId())) {
+        if (employeeService.isEmployeeValid(projectEntity.getResponsibleEmployeeId())) {
             throw new EmployeeNotFoundException("Employee with Id " +
                     projectEntity.getResponsibleEmployeeId() + "doesnt exist");
         }
         if (projectEntity.getProjectEmployeesIds() != null) {
             for (Long employeeId : projectEntity.getProjectEmployeesIds()) {
-                if (!employeeService.isEmployeeValid(employeeId)) {
+                if (employeeService.isEmployeeValid(employeeId)) {
                     throw new EmployeeNotFoundException(
                             "Employee with Id " + employeeId +
                                     " doesn't exist");
@@ -79,13 +79,13 @@ public class ProjectController implements ProjectControllerOpenAPI {
             throw new ProjectNotFoundException("ProjectEntity not found on " +
                     "id = " + projectId);
         }
-        if (!employeeService.isEmployeeValid(projectEntity.getResponsibleEmployeeId())) {
+        if (employeeService.isEmployeeValid(projectEntity.getResponsibleEmployeeId())) {
             throw new EmployeeNotFoundException("Employee with Id " +
                     projectEntity.getResponsibleEmployeeId() + "doesnt exist");
         }
         if (projectEntity.getProjectEmployeesIds() != null) {
             for (Long employeeId : projectEntity.getProjectEmployeesIds()) {
-                if (!employeeService.isEmployeeValid(employeeId)) {
+                if (employeeService.isEmployeeValid(employeeId)) {
                     throw new EmployeeNotFoundException(
                             "Employee with Id " + employeeId +
                                     " doesn't exist");
@@ -123,5 +123,32 @@ public class ProjectController implements ProjectControllerOpenAPI {
         }
 
         return this.projectMapper.mapEntityToGetDto(projectEntity);
+    }
+    @PostMapping("/{projectId}/employees/{employeeId}")
+    public ProjectGetDto addEmployeeToProject(
+            @PathVariable Long projectId,
+            @PathVariable Long employeeId) {
+        try {
+            ProjectEntity updatedProject = this.projectService.addEmployeeToProject(projectId, employeeId);
+            return this.projectMapper.mapEntityToGetDto(updatedProject);
+        } catch (ProjectNotFoundException | EmployeeNotFoundException exception) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, exception.getMessage());
+        } catch (IllegalArgumentException exception) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, exception.getMessage());
+        }
+    }
+
+    @DeleteMapping("/{projectId}/employees/{employeeId}")
+    public ProjectGetDto removeEmployeeFromProject(
+            @PathVariable Long projectId,
+            @PathVariable Long employeeId) {
+        try {
+            ProjectEntity updatedProject = this.projectService.removeEmployeeFromProject(projectId, employeeId);
+            return this.projectMapper.mapEntityToGetDto(updatedProject);
+        } catch (ProjectNotFoundException exception) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, exception.getMessage());
+        } catch (IllegalArgumentException exception) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, exception.getMessage());
+        }
     }
 }

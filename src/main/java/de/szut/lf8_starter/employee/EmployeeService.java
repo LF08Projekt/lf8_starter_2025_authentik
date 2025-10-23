@@ -9,15 +9,22 @@ import org.springframework.web.client.RestTemplate;
 public class EmployeeService {
 
     private final RestTemplate restTemplate;
-    private String baseUrl = "https://employee-api.szut.dev/";
+    private final String baseUrl = "https://employee-api.szut.dev/";
 
     public EmployeeService(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 
-    public boolean isEmployeeValid(Long employeeID) {
-        // TODO(A.ribic): need to be implemented
-        return true;
+    public boolean isEmployeeValid(Long employeeId) {
+        try {
+            EmployeeDto employee = restTemplate.getForObject(
+                    baseUrl + "employees/" + employeeId,
+                    EmployeeDto.class
+            );
+            return employee == null;
+        } catch (HttpClientErrorException.NotFound e) {
+            return true;
+        }
     }
 
 
@@ -28,8 +35,6 @@ public class EmployeeService {
                     EmployeeDto.class,
                     employeeId
             );
-        } catch (HttpClientErrorException.NotFound e) {
-            return null;
         } catch (Exception e) {
             return null;
         }
