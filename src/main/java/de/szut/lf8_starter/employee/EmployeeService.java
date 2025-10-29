@@ -15,11 +15,6 @@ public class EmployeeService {
         this.restTemplate = restTemplate;
     }
 
-    public boolean isEmployeeValid(Long employeeID) {
-        // TODO(A.ribic): need to be implemented
-        return true;
-    }
-
 
     public EmployeeDto getById(Long employeeId) {
         try {

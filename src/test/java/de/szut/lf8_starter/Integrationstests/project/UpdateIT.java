@@ -68,12 +68,9 @@ public class UpdateIT extends AbstractIntegrationTest {
                 .andExpect(jsonPath("$.customerId", is(1)))
                 .andExpect(jsonPath("$.responsibleCustomerName", is("Jan")))
                 .andExpect(jsonPath("$.comment", is("nichts")))
-                .andExpect(jsonPath("$.startDate", is("2025-12-10T00:00:00" +
-                        ".000+00:00")))
-                .andExpect(jsonPath("$.plannedEndDate", is("2027-12-13T00:00" +
-                        ":00.000+00:00")))
-                .andExpect(jsonPath("$.actualEndDate", is("2025-12-14T00:00" +
-                        ":00.000+00:00")))
+                .andExpect(jsonPath("$.startDate", is("2025-12-10")))
+                .andExpect(jsonPath("$.plannedEndDate", is("2027-12-13")))
+                .andExpect(jsonPath("$.actualEndDate", is("2025-12-14")))
                 .andReturn();
     }
 

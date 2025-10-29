@@ -3,11 +3,8 @@ package de.szut.lf8_starter.project.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-import org.springframework.cglib.core.Local;
 
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.List;
 
 @Data
 public class ProjectCreateDto {
@@ -33,7 +30,4 @@ public class ProjectCreateDto {
     private LocalDate plannedEndDate;
 
     private LocalDate actualEndDate;
-
-    @NotNull
-    private List<Long> projectEmployeesIds;
 }

@@ -18,7 +18,6 @@ public class ProjectMapper {
         newProject.setPlannedEndDate(dto.getPlannedEndDate());
         newProject.setActualEndDate(dto.getActualEndDate());
         newProject.setComment(dto.getComment());
-        newProject.setProjectEmployeesIds(dto.getProjectEmployeesIds());
         return newProject;
     }
 
@@ -48,7 +47,6 @@ public class ProjectMapper {
         projectToUpdate.setPlannedEndDate(updateDto.getPlannedEndDate());
         projectToUpdate.setActualEndDate(updateDto.getActualEndDate());
         projectToUpdate.setComment(updateDto.getComment());
-        projectToUpdate.setProjectEmployeesIds(updateDto.getProjectEmployeesIds());
         return projectToUpdate;
     }
 }

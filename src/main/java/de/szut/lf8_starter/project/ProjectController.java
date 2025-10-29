@@ -35,13 +35,13 @@ public class ProjectController implements ProjectControllerOpenAPI {
         ProjectEntity projectEntity =
                 this.projectMapper.mapCreateDtoToEntity(projectCreateDto);
 
-        if (!employeeService.isEmployeeValid(projectEntity.getResponsibleEmployeeId())) {
+        if (!projectService.isEmployeeIdValid(projectEntity.getResponsibleEmployeeId())) {
             throw new EmployeeNotFoundException("Employee with Id " +
                     projectEntity.getResponsibleEmployeeId() + "doesnt exist");
         }
         if (projectEntity.getProjectEmployeesIds() != null) {
             for (Long employeeId : projectEntity.getProjectEmployeesIds()) {
-                if (!employeeService.isEmployeeValid(employeeId)) {
+                if (!projectService.isEmployeeIdValid(employeeId)) {
                     throw new EmployeeNotFoundException(
                             "Employee with Id " + employeeId +
                                     " doesn't exist");
@@ -79,13 +79,13 @@ public class ProjectController implements ProjectControllerOpenAPI {
             throw new ProjectNotFoundException("ProjectEntity not found on " +
                     "id = " + projectId);
         }
-        if (!employeeService.isEmployeeValid(projectEntity.getResponsibleEmployeeId())) {
+        if (!projectService.isEmployeeIdValid(projectEntity.getResponsibleEmployeeId())) {
             throw new EmployeeNotFoundException("Employee with Id " +
                     projectEntity.getResponsibleEmployeeId() + "doesnt exist");
         }
         if (projectEntity.getProjectEmployeesIds() != null) {
             for (Long employeeId : projectEntity.getProjectEmployeesIds()) {
-                if (!employeeService.isEmployeeValid(employeeId)) {
+                if (!projectService.isEmployeeIdValid(employeeId)) {
                     throw new EmployeeNotFoundException(
                             "Employee with Id " + employeeId +
                                     " doesn't exist");
