@@ -1,8 +1,11 @@
 package de.szut.lf8_starter.project;
 
 import de.szut.lf8_starter.employee.EmployeeService;
+import de.szut.lf8_starter.exceptionHandling.EmployeeNotAvailableException;
 import de.szut.lf8_starter.exceptionHandling.EmployeeNotFoundException;
 import de.szut.lf8_starter.exceptionHandling.ProjectNotFoundException;
+import de.szut.lf8_starter.exceptionHandling.QualificationNotMatchException;
+import de.szut.lf8_starter.project.dto.ProjectAddEmployeeDto;
 import de.szut.lf8_starter.project.dto.ProjectCreateDto;
 import de.szut.lf8_starter.project.dto.ProjectGetDto;
 import de.szut.lf8_starter.project.dto.ProjectUpdateDto;
@@ -11,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import jakarta.validation.Valid;
 
+import java.time.LocalDate;
 import java.util.List;
 
 
@@ -35,18 +39,9 @@ public class ProjectController implements ProjectControllerOpenAPI {
         ProjectEntity projectEntity =
                 this.projectMapper.mapCreateDtoToEntity(projectCreateDto);
 
-        if (!projectService.isEmployeeIdValid(projectEntity.getResponsibleEmployeeId())) {
+        if (!employeeService.isEmployeeIdValid(projectEntity.getResponsibleEmployeeId())) {
             throw new EmployeeNotFoundException("Employee with Id " +
                     projectEntity.getResponsibleEmployeeId() + "doesnt exist");
-        }
-        if (projectEntity.getProjectEmployeesIds() != null) {
-            for (Long employeeId : projectEntity.getProjectEmployeesIds()) {
-                if (!projectService.isEmployeeIdValid(employeeId)) {
-                    throw new EmployeeNotFoundException(
-                            "Employee with Id " + employeeId +
-                                    " doesn't exist");
-                }
-            }
         }
         try {
             projectEntity = this.projectService.create(projectEntity);
@@ -79,18 +74,9 @@ public class ProjectController implements ProjectControllerOpenAPI {
             throw new ProjectNotFoundException("ProjectEntity not found on " +
                     "id = " + projectId);
         }
-        if (!projectService.isEmployeeIdValid(projectEntity.getResponsibleEmployeeId())) {
+        if (!employeeService.isEmployeeIdValid(projectEntity.getResponsibleEmployeeId())) {
             throw new EmployeeNotFoundException("Employee with Id " +
                     projectEntity.getResponsibleEmployeeId() + "doesnt exist");
-        }
-        if (projectEntity.getProjectEmployeesIds() != null) {
-            for (Long employeeId : projectEntity.getProjectEmployeesIds()) {
-                if (!projectService.isEmployeeIdValid(employeeId)) {
-                    throw new EmployeeNotFoundException(
-                            "Employee with Id " + employeeId +
-                                    " doesn't exist");
-                }
-            }
         }
         try {
             ProjectEntity updatedProjectEntity =
@@ -123,5 +109,48 @@ public class ProjectController implements ProjectControllerOpenAPI {
         }
 
         return this.projectMapper.mapEntityToGetDto(projectEntity);
+    }
+
+    @PostMapping("/{id}/add/{employeeId}/qualification/{qualificationId}")
+    public ProjectGetDto addEmployeesToProject(
+            @PathVariable("id") long projectId,
+            @PathVariable("employeeId") long employeeId,
+            @PathVariable("qualificationId") long qualificationId,
+            @RequestBody @Valid ProjectAddEmployeeDto projectAddEmployeeDto) {
+        ProjectEntity currentProject = projectService.readById(projectId);
+        ProjectEntity projectEntity =
+                this.projectMapper.mapProjectAddEmployeeDtoToEntity(projectAddEmployeeDto, currentProject);
+
+        if (projectEntity == null) {
+            throw new ProjectNotFoundException("ProjectEntity not found on " +
+                    "id = " + projectId);
+        }
+
+        final LocalDate startDate = projectEntity.getStartDate();
+        final LocalDate endDate = projectEntity.getPlannedEndDate();
+
+        if (!employeeService.isEmployeeIdValid(employeeId)) {
+            throw new EmployeeNotFoundException("EmployeeEntity not found on id = " + employeeId);
+        }
+
+        if (!projectService.isEmployeeAvailable(projectId, employeeId)) {
+            throw new EmployeeNotAvailableException(
+                    "Employee is unavailable during the period " + startDate + " - " + endDate
+            );
+        }
+
+        if (!projectService.isEmployeeQualified(qualificationId, employeeId)) {
+            throw new QualificationNotMatchException(
+                    "Employee doesn't have the qualification " + qualificationId
+            );
+        }
+        try {
+            ProjectEntity finalProjectEntity =
+                    projectService.addEmployeeToProject(projectId, employeeId, qualificationId);
+            return projectMapper.mapEntityToGetDto(finalProjectEntity);
+        } catch (ProjectNotFoundException exception) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
+                    exception.getMessage());
+        }
     }
 }

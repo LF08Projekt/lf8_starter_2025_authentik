@@ -1,14 +1,17 @@
 package de.szut.lf8_starter.project;
 
+import de.szut.lf8_starter.project.dto.ProjectAddEmployeeDto;
 import de.szut.lf8_starter.project.dto.ProjectCreateDto;
 import de.szut.lf8_starter.project.dto.ProjectGetDto;
 import de.szut.lf8_starter.project.dto.ProjectUpdateDto;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ProjectMapper {
 
-    public ProjectEntity mapCreateDtoToEntity(ProjectCreateDto dto){
+    public ProjectEntity mapCreateDtoToEntity(ProjectCreateDto dto) {
         ProjectEntity newProject = new ProjectEntity();
         newProject.setName(dto.getName());
         newProject.setCustomerId(dto.getCustomerId());
@@ -21,7 +24,7 @@ public class ProjectMapper {
         return newProject;
     }
 
-    public ProjectGetDto mapEntityToGetDto(ProjectEntity entity){
+    public ProjectGetDto mapEntityToGetDto(ProjectEntity entity) {
         ProjectGetDto newDto = new ProjectGetDto();
         newDto.setProjectId(entity.getProjectId());
         newDto.setName(entity.getName());
@@ -36,7 +39,7 @@ public class ProjectMapper {
         return newDto;
     }
 
-    public ProjectEntity mapUpdateDtoToEntity(ProjectUpdateDto updateDto, Long projectId){
+    public ProjectEntity mapUpdateDtoToEntity(ProjectUpdateDto updateDto, Long projectId) {
         ProjectEntity projectToUpdate = new ProjectEntity();
         projectToUpdate.setProjectId(projectId);
         projectToUpdate.setName(updateDto.getName());
@@ -48,5 +51,13 @@ public class ProjectMapper {
         projectToUpdate.setActualEndDate(updateDto.getActualEndDate());
         projectToUpdate.setComment(updateDto.getComment());
         return projectToUpdate;
+    }
+
+    public ProjectEntity mapProjectAddEmployeeDtoToEntity(ProjectAddEmployeeDto projectAddEmployeeDto, ProjectEntity projectEntityToUpdate) {
+        Long employeeToAdd = projectAddEmployeeDto.getNewEmployeeId();
+        List<Long> employeeIds = projectEntityToUpdate.getProjectEmployeesIds();
+        employeeIds.add(employeeToAdd);
+        projectEntityToUpdate.setProjectEmployeesIds(employeeIds);
+        return projectEntityToUpdate;
     }
 }

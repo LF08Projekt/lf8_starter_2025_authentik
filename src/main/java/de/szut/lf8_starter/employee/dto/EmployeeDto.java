@@ -11,6 +11,6 @@ public class EmployeeDto {
 
 
     private Long id;
-    private List<String> qualifications;
+    private List<Long> qualifications;
 
 }

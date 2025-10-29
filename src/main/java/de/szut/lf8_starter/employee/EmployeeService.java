@@ -29,5 +29,10 @@ public class EmployeeService {
             return null;
         }
     }
+
+    public boolean isEmployeeIdValid(Long employeeID) {
+        if(getById(employeeID).equals())
+        return true;
+    }
 }
 
