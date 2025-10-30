@@ -31,8 +31,7 @@ public class EmployeeService {
     }
 
     public boolean isEmployeeIdValid(Long employeeID) {
-        if(getById(employeeID).equals())
-        return true;
+        return getById(employeeID).getId().equals(employeeID);
     }
 }
 
