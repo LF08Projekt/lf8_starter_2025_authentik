@@ -121,6 +121,7 @@ public class ProjectController implements ProjectControllerOpenAPI {
         ProjectEntity projectEntity = this.projectService.readById(projectId);
 
         if(projectEntity == null) {
+
             throw new ProjectNotFoundException("ProjectEntity not found on id" +
                     " = " + projectId);
         }
