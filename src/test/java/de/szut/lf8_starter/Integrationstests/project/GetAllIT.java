@@ -13,7 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 
-public class GetAllIT  extends AbstractIntegrationTest {
+public class GetAllIT extends AbstractIntegrationTest {
 
     @Test
     @WithMockUser(roles = "user")
@@ -34,7 +34,7 @@ public class GetAllIT  extends AbstractIntegrationTest {
         projectRepository.save(project2);
 
         this.mockMvc.perform(get("/projects")
-                .with(csrf()))
+                        .with(csrf()))
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$[0].name", is("Test 1")))
