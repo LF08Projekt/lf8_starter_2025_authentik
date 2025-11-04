@@ -5,12 +5,9 @@ import de.szut.lf8_starter.employee.dto.EmployeeDto;
 import de.szut.lf8_starter.exceptionHandling.EmployeeNotAvailableException;
 import de.szut.lf8_starter.exceptionHandling.EmployeeNotFoundException;
 import de.szut.lf8_starter.exceptionHandling.ProjectNotFoundException;
-import de.szut.lf8_starter.exceptionHandling.QualificationNotMatchException;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -67,17 +64,20 @@ public class ProjectService {
         return true;
     }
 
+
     public boolean isEmployeeQualified(Long requiredQualificationId, Long employeeId) {
-        boolean isQualified = false;
-        for (int i = 0; i < employeeService.getById(employeeId).getQualifications().size(); i++) {
-            if (Objects.equals(requiredQualificationId, employeeService.getById(employeeId).getQualifications().get(i))) {
-                isQualified = true;
-            }
+        var employee = employeeService.getById(employeeId);
+
+        if (employee == null) {
+            return false;
         }
-        return isQualified;
+
+        return employee.getQualifications().stream()
+                .anyMatch(q -> q.equals(requiredQualificationId));
     }
 
-    public ProjectEntity addEmployeeToProject(Long projectId, Long employeeId, Long requiredQualificationId) {
+
+    public ProjectEntity addEmployeeToProject(Long projectId, Long employeeId) {
         var optionalProject = projectRepository.findById(projectId);
 
         if (optionalProject.isEmpty()) {
@@ -92,6 +92,4 @@ public class ProjectService {
 
         return projectRepository.save(existingProject);
     }
-
-    public List<EmployeeDto>
 }

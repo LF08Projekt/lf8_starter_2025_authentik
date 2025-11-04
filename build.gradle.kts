@@ -38,7 +38,9 @@ dependencies {
     testImplementation("org.springframework.security:spring-security-test")
     testImplementation("org.testcontainers:testcontainers:1.20.0")
     testImplementation("org.testcontainers:postgresql:1.20.0")
+/*
     testImplementation("org.mockito:mockito-core:5.20.0")
+*/
 }
 
 tasks.withType<Test> {
