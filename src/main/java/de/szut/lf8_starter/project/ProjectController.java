@@ -52,6 +52,7 @@ public class ProjectController implements ProjectControllerOpenAPI {
         return this.projectMapper.mapEntityToGetDto(projectEntity);
     }
 
+
     @DeleteMapping("/{id}")
     public void deleteProjectById(@PathVariable long id) {
         var entity = this.projectService.readById(id);
@@ -74,10 +75,10 @@ public class ProjectController implements ProjectControllerOpenAPI {
             throw new ProjectNotFoundException("ProjectEntity not found on " +
                     "id = " + projectId);
         }
-        if (!employeeService.isEmployeeIdValid(projectEntity.getResponsibleEmployeeId())) {
+        /*if (!employeeService.isEmployeeIdValid(projectEntity.getResponsibleEmployeeId())) {
             throw new EmployeeNotFoundException("Employee with Id " +
                     projectEntity.getResponsibleEmployeeId() + "doesnt exist");
-        }
+        }*/
         try {
             ProjectEntity updatedProjectEntity =
                     projectMapper.mapUpdateDtoToEntity(projectUpdateDto,
