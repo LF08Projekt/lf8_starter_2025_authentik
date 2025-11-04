@@ -1,13 +1,12 @@
 package de.szut.lf8_starter.project;
 
 import de.szut.lf8_starter.employee.EmployeeService;
-import de.szut.lf8_starter.employee.dto.EmployeeDto;
-import de.szut.lf8_starter.exceptionHandling.EmployeeNotAvailableException;
-import de.szut.lf8_starter.exceptionHandling.EmployeeNotFoundException;
+import de.szut.lf8_starter.employee.dto.EmployeeInfoDto;
 import de.szut.lf8_starter.exceptionHandling.ProjectNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -91,5 +90,23 @@ public class ProjectService {
         existingProject.setProjectEmployeesIds(employeeIds);
 
         return projectRepository.save(existingProject);
+    }
+
+    public List<EmployeeInfoDto> listAllEmployeesForProject(Long projectId) {
+        var optionalProject = projectRepository.findById(projectId);
+
+        if (optionalProject.isEmpty()) {
+            throw new ProjectNotFoundException(
+                    "ProjectEntity not found on id = " + projectId);
+        }
+
+        var existingProject = optionalProject.get();
+        List<Long> employeeIds = existingProject.getProjectEmployeesIds();
+
+        return employeeIds.stream()
+                .map(employeeService::getEmployeeInfoById) // Holt
+                // EmployeeInfoDto
+                .filter(Objects::nonNull)
+                .toList();
     }
 }
