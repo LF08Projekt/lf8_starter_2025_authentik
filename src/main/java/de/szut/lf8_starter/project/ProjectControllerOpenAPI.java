@@ -1,5 +1,6 @@
 package de.szut.lf8_starter.project;
 
+import de.szut.lf8_starter.employee.dto.EmployeeInfoDto;
 import de.szut.lf8_starter.project.dto.ProjectAddEmployeeDto;
 import de.szut.lf8_starter.project.dto.ProjectCreateDto;
 import de.szut.lf8_starter.project.dto.ProjectGetDto;
@@ -86,14 +87,33 @@ public interface ProjectControllerOpenAPI {
 
     @Operation(summary = "Add employee to project with qualification")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Employee added to project successfully",
+            @ApiResponse(responseCode = "200",
+                    description = "Employee added to project successfully",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = ProjectGetDto.class))}),
-            @ApiResponse(responseCode = "404", description = "Project not found, Employee not found, or Employee doesn't have the required qualification",
+                            schema = @Schema(
+                                    implementation = ProjectGetDto.class))}),
+            @ApiResponse(responseCode = "404",
+                    description = "Project not found, Employee not found, or Employee doesn't have the required qualification",
                     content = @Content),
-            @ApiResponse(responseCode = "409", description = "Employee is not available during the project period",
+            @ApiResponse(responseCode = "409",
+                    description = "Employee is not available during the project period",
                     content = @Content),
             @ApiResponse(responseCode = "401", description = "not authorized",
                     content = @Content)})
     ProjectGetDto addEmployeesToProject(long projectId, long employeeId, long qualificationId);
+
+    @Operation(
+            summary = "List all employees assigned to a project with their details")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Employees listed successfully",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(
+                                    implementation = EmployeeInfoDto.class))}),
+            @ApiResponse(responseCode = "404",
+                    description = "Project not found",
+                    content = @Content),
+            @ApiResponse(responseCode = "401", description = "not authorized",
+                    content = @Content)})
+    List<EmployeeInfoDto> listEmployeesForProject(long projectId);
 }

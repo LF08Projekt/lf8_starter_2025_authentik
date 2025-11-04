@@ -1,5 +1,7 @@
 package de.szut.lf8_starter.project;
 
+import de.szut.lf8_starter.employee.dto.EmployeeDto;
+import de.szut.lf8_starter.employee.dto.EmployeeInfoDto;
 import de.szut.lf8_starter.project.dto.ProjectAddEmployeeDto;
 import de.szut.lf8_starter.project.dto.ProjectCreateDto;
 import de.szut.lf8_starter.project.dto.ProjectGetDto;
