@@ -54,6 +54,7 @@ public class ProjectController implements ProjectControllerOpenAPI {
 
 
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteProjectById(@PathVariable long id) {
         var entity = this.projectService.readById(id);
         if (entity == null) {
@@ -90,6 +91,22 @@ public class ProjectController implements ProjectControllerOpenAPI {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,
                     exception.getMessage());
         }
+      /*  @PutMapping("/{id}")
+        public ProjectGetDto updateProject(@PathVariable("id") long projectId,
+        @RequestBody @Valid ProjectUpdateDto projectUpdateDto) {
+            if (!employeeService.isEmployeeIdValid(projectUpdateDto.getResponsibleEmployeeId())) {
+                throw new EmployeeNotFoundException("Employee with ID " +
+                        projectUpdateDto.getResponsibleEmployeeId() + " does not exist");
+            }
+
+            try {
+                ProjectEntity updatedProject = projectMapper.mapUpdateDtoToEntity(projectUpdateDto, projectId);
+                ProjectEntity savedProject = projectService.update(projectId, updatedProject);
+                return projectMapper.mapEntityToGetDto(savedProject);
+            } catch (ProjectNotFoundException exception) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, exception.getMessage());
+            }
+        }*/
     }
 
     @GetMapping
@@ -112,7 +129,7 @@ public class ProjectController implements ProjectControllerOpenAPI {
         return this.projectMapper.mapEntityToGetDto(projectEntity);
     }
 
-    @PostMapping("/{id}/add/{employeeId}/qualification/{qualificationId}")
+  /*  @PostMapping("/{id}/add/{employeeId}/qualification/{qualificationId}")
     public ProjectGetDto addEmployeesToProject(
             @PathVariable("id") long projectId,
             @PathVariable("employeeId") long employeeId,
@@ -153,5 +170,37 @@ public class ProjectController implements ProjectControllerOpenAPI {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,
                     exception.getMessage());
         }
+    }*/
+    @PostMapping("/{id}/add/{employeeId}/qualification/{qualificationId}")
+    public ProjectGetDto addEmployeesToProject(
+            @PathVariable("id") long projectId,
+            @PathVariable("employeeId") long employeeId,
+            @PathVariable("qualificationId") long qualificationId) {
+
+        ProjectEntity project = projectService.readById(projectId);
+        if (project == null) {
+            throw new ProjectNotFoundException("Project with ID = " + projectId + " not found.");
+        }
+
+        if (!employeeService.isEmployeeIdValid(employeeId)) {
+            throw new EmployeeNotFoundException("Employee with ID = " + employeeId + " not found.");
+        }
+
+        if (!projectService.isEmployeeAvailable(projectId, employeeId)) {
+            throw new EmployeeNotAvailableException(
+                    "Employee is unavailable during the project period " +
+                            project.getStartDate() + " - " + project.getPlannedEndDate()
+            );
+        }
+
+        if (!projectService.isEmployeeQualified(qualificationId, employeeId)) {
+            throw new QualificationNotMatchException(
+                    "Employee does not have the required qualification " + qualificationId
+            );
+        }
+
+        ProjectEntity updatedProject = projectService.addEmployeeToProject(projectId, employeeId, qualificationId);
+        return projectMapper.mapEntityToGetDto(updatedProject);
     }
+
 }
