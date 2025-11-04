@@ -62,7 +62,23 @@ public class ProjectService {
         return true;
     }
 
+
+
+
+
+
     public boolean isEmployeeQualified(Long requiredQualificationId, Long employeeId) {
+        var employee = employeeService.getById(employeeId);
+
+        if (employee == null || employee.getQualifications() == null) {
+            return false;
+        }
+
+        return employee.getQualifications().stream()
+                .anyMatch(q -> Objects.equals(q, requiredQualificationId));
+    }
+
+/*    public boolean isEmployeeQualified(Long requiredQualificationId, Long employeeId) {
         boolean isQualified = false;
         for (int i = 0; i < employeeService.getById(employeeId).getQualifications().size(); i++) {
             if (Objects.equals(requiredQualificationId, employeeService.getById(employeeId).getQualifications().get(i))) {
@@ -70,7 +86,7 @@ public class ProjectService {
             }
         }
         return isQualified;
-    }
+    }*/
 
     public ProjectEntity addEmployeeToProject(Long projectId, Long employeeId, Long requiredQualificationId) {
         var optionalProject = projectRepository.findById(projectId);

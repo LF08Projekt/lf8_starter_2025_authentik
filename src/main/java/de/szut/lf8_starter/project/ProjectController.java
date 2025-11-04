@@ -37,10 +37,10 @@ public class ProjectController implements ProjectControllerOpenAPI {
         ProjectEntity projectEntity =
                 this.projectMapper.mapCreateDtoToEntity(projectCreateDto);
 
-        if (!employeeService.isEmployeeIdValid(projectEntity.getResponsibleEmployeeId())) {
+      /*  if (!employeeService.isEmployeeIdValid(projectEntity.getResponsibleEmployeeId())) {
             throw new EmployeeNotFoundException("Employee with Id " +
                     projectEntity.getResponsibleEmployeeId() + "doesnt exist");
-        }
+        }*/
         try {
             projectEntity = this.projectService.create(projectEntity);
         } catch (EmployeeNotFoundException exception) {

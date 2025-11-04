@@ -42,6 +42,11 @@ public class AuthentikSecurityConfig {
                         })
                 )
                 .authorizeHttpRequests(authz -> authz
+                        .requestMatchers(
+                                "/swagger-ui.html", "/swagger-ui/**",
+                                "/swagger", "/swagger/**",
+                                "/v3/api-docs", "/v3/api-docs/**"
+                        ).permitAll()
                         .requestMatchers("/hello").authenticated()
                         .requestMatchers("/hello/**").authenticated()
                         .requestMatchers("/projects").authenticated()
@@ -63,6 +68,4 @@ public class AuthentikSecurityConfig {
         source.registerCorsConfiguration("/**", cfg);
         return source;
     }
-
-
 }
