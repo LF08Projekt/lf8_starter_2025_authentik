@@ -1,6 +1,7 @@
 package de.szut.lf8_starter.project;
 
 import de.szut.lf8_starter.employee.EmployeeService;
+import de.szut.lf8_starter.employee.dto.EmployeeDto;
 import de.szut.lf8_starter.exceptionHandling.EmployeeNotAvailableException;
 import de.szut.lf8_starter.exceptionHandling.EmployeeNotFoundException;
 import de.szut.lf8_starter.exceptionHandling.ProjectNotFoundException;
@@ -91,4 +92,6 @@ public class ProjectService {
 
         return projectRepository.save(existingProject);
     }
+
+    public List<EmployeeDto>
 }
