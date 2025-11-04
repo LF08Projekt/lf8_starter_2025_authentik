@@ -5,7 +5,6 @@ import de.szut.lf8_starter.exceptionHandling.ProjectNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -63,32 +62,19 @@ public class ProjectService {
     }
 
 
-
-
-
-
     public boolean isEmployeeQualified(Long requiredQualificationId, Long employeeId) {
         var employee = employeeService.getById(employeeId);
 
-        if (employee == null || employee.getQualifications() == null) {
+        if (employee == null) {
             return false;
         }
 
         return employee.getQualifications().stream()
-                .anyMatch(q -> Objects.equals(q, requiredQualificationId));
+                .anyMatch(q -> q.equals(requiredQualificationId));
     }
 
-/*    public boolean isEmployeeQualified(Long requiredQualificationId, Long employeeId) {
-        boolean isQualified = false;
-        for (int i = 0; i < employeeService.getById(employeeId).getQualifications().size(); i++) {
-            if (Objects.equals(requiredQualificationId, employeeService.getById(employeeId).getQualifications().get(i))) {
-                isQualified = true;
-            }
-        }
-        return isQualified;
-    }*/
 
-    public ProjectEntity addEmployeeToProject(Long projectId, Long employeeId, Long requiredQualificationId) {
+    public ProjectEntity addEmployeeToProject(Long projectId, Long employeeId) {
         var optionalProject = projectRepository.findById(projectId);
 
         if (optionalProject.isEmpty()) {

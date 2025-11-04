@@ -8,10 +8,10 @@ import de.szut.lf8_starter.exceptionHandling.QualificationNotMatchException;
 import de.szut.lf8_starter.project.dto.ProjectCreateDto;
 import de.szut.lf8_starter.project.dto.ProjectGetDto;
 import de.szut.lf8_starter.project.dto.ProjectUpdateDto;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import jakarta.validation.Valid;
 
 import java.util.List;
 
@@ -37,10 +37,10 @@ public class ProjectController implements ProjectControllerOpenAPI {
         ProjectEntity projectEntity =
                 this.projectMapper.mapCreateDtoToEntity(projectCreateDto);
 
-      /*  if (!employeeService.isEmployeeIdValid(projectEntity.getResponsibleEmployeeId())) {
+        if (!employeeService.isEmployeeIdValid(projectEntity.getResponsibleEmployeeId())) {
             throw new EmployeeNotFoundException("Employee with Id " +
                     projectEntity.getResponsibleEmployeeId() + "doesnt exist");
-        }*/
+        }
         try {
             projectEntity = this.projectService.create(projectEntity);
         } catch (EmployeeNotFoundException exception) {
@@ -74,10 +74,10 @@ public class ProjectController implements ProjectControllerOpenAPI {
             throw new ProjectNotFoundException("ProjectEntity not found on " +
                     "id = " + projectId);
         }
-        /*if (!employeeService.isEmployeeIdValid(projectEntity.getResponsibleEmployeeId())) {
+        if (!employeeService.isEmployeeIdValid(projectEntity.getResponsibleEmployeeId())) {
             throw new EmployeeNotFoundException("Employee with Id " +
                     projectEntity.getResponsibleEmployeeId() + "doesnt exist");
-        }*/
+        }
         try {
             ProjectEntity updatedProjectEntity =
                     projectMapper.mapUpdateDtoToEntity(projectUpdateDto,
@@ -103,7 +103,7 @@ public class ProjectController implements ProjectControllerOpenAPI {
     public ProjectGetDto findProjectById(@PathVariable("id") long projectId) {
         ProjectEntity projectEntity = this.projectService.readById(projectId);
 
-        if(projectEntity == null) {
+        if (projectEntity == null) {
 
             throw new ProjectNotFoundException("ProjectEntity not found on id" +
                     " = " + projectId);
@@ -118,29 +118,34 @@ public class ProjectController implements ProjectControllerOpenAPI {
             @PathVariable("employeeId") long employeeId,
             @PathVariable("qualificationId") long qualificationId) {
 
+
         ProjectEntity project = projectService.readById(projectId);
         if (project == null) {
             throw new ProjectNotFoundException("Project with ID = " + projectId + " not found.");
         }
 
-        if (!employeeService.isEmployeeIdValid(employeeId)) {
+        boolean employeeValid = employeeService.isEmployeeIdValid(employeeId);
+        if (!employeeValid) {
             throw new EmployeeNotFoundException("Employee with ID = " + employeeId + " not found.");
         }
 
-        if (!projectService.isEmployeeAvailable(projectId, employeeId)) {
+        boolean available = projectService.isEmployeeAvailable(projectId, employeeId);
+        if (!available) {
             throw new EmployeeNotAvailableException(
                     "Employee is unavailable during the project period " +
                             project.getStartDate() + " - " + project.getPlannedEndDate()
             );
         }
 
-        if (!projectService.isEmployeeQualified(qualificationId, employeeId)) {
+        boolean qualified = projectService.isEmployeeQualified(qualificationId, employeeId);
+        if (!qualified) {
             throw new QualificationNotMatchException(
                     "Employee does not have the required qualification " + qualificationId
             );
         }
 
-        ProjectEntity updatedProject = projectService.addEmployeeToProject(projectId, employeeId, qualificationId);
+        ProjectEntity updatedProject = projectService.addEmployeeToProject(projectId, employeeId);
+
         return projectMapper.mapEntityToGetDto(updatedProject);
     }
 
