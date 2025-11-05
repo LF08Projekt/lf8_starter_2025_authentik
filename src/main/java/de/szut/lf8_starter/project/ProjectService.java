@@ -5,6 +5,7 @@ import de.szut.lf8_starter.employee.dto.EmployeeInfoDto;
 import de.szut.lf8_starter.exceptionHandling.ProjectNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -108,5 +109,23 @@ public class ProjectService {
                 // EmployeeInfoDto
                 .filter(Objects::nonNull)
                 .toList();
+    }
+
+    public List<ProjectEntity> listAllProjectsForEmployee(Long employeeId){
+        List<ProjectEntity> allProjectsOfEmployee = new ArrayList<>();
+        List<ProjectEntity> completeProjectList = readAll();
+        Long currentProjectId;
+        List<Long> employeeIdList;
+        for (int i = 0; completeProjectList.size() > i; i++){
+            currentProjectId = completeProjectList.get(i).getProjectId();
+            employeeIdList =
+                    readById(currentProjectId).getProjectEmployeesIds();
+            for(int j = 0; employeeIdList.size() > j; j++){
+                if(employeeIdList.get(j).equals(employeeId)){
+                    allProjectsOfEmployee.add(readById(currentProjectId));
+                }
+            }
+        }
+        return allProjectsOfEmployee;
     }
 }

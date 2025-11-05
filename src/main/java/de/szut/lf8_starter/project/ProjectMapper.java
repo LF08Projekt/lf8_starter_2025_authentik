@@ -21,7 +21,6 @@ public class ProjectMapper {
         newProject.setResponsibleEmployeeId(dto.getResponsibleEmployeeId());
         newProject.setStartDate(dto.getStartDate());
         newProject.setPlannedEndDate(dto.getPlannedEndDate());
-        newProject.setActualEndDate(dto.getActualEndDate());
         newProject.setComment(dto.getComment());
         return newProject;
     }

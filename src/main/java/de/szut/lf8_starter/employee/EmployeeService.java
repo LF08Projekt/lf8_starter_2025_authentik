@@ -63,7 +63,6 @@ public class EmployeeService {
             if (response.getStatusCode() == HttpStatus.OK) {
                 return response.getBody();
             } else {
-
                 return null;
             }
         } catch (Exception e) {

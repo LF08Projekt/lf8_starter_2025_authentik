@@ -100,6 +100,22 @@ public class ProjectController implements ProjectControllerOpenAPI {
                 .toList();
     }
 
+    @GetMapping("/employee/{id}")
+    public List<ProjectGetDto> findAllProjectsOfEmployee(
+            @PathVariable("id") long employeeId) {
+
+        boolean employeeValid = employeeService.isEmployeeIdValid(employeeId);
+        if (!employeeValid) {
+            throw new EmployeeNotFoundException(
+                    "Employee with ID = " + employeeId + " not found.");
+        }
+
+        return this.projectService.listAllProjectsForEmployee(employeeId)
+                .stream()
+                .map(this.projectMapper::mapEntityToGetDto)
+                .toList();
+    }
+
     @GetMapping("/{id}")
     public ProjectGetDto findProjectById(@PathVariable("id") long projectId) {
         ProjectEntity projectEntity = this.projectService.readById(projectId);
@@ -122,41 +138,50 @@ public class ProjectController implements ProjectControllerOpenAPI {
 
         ProjectEntity project = projectService.readById(projectId);
         if (project == null) {
-            throw new ProjectNotFoundException("Project with ID = " + projectId + " not found.");
+            throw new ProjectNotFoundException(
+                    "Project with ID = " + projectId + " not found.");
         }
 
         boolean employeeValid = employeeService.isEmployeeIdValid(employeeId);
         if (!employeeValid) {
-            throw new EmployeeNotFoundException("Employee with ID = " + employeeId + " not found.");
+            throw new EmployeeNotFoundException(
+                    "Employee with ID = " + employeeId + " not found.");
         }
 
-        boolean available = projectService.isEmployeeAvailable(projectId, employeeId);
+        boolean available =
+                projectService.isEmployeeAvailable(projectId, employeeId);
         if (!available) {
             throw new EmployeeNotAvailableException(
                     "Employee is unavailable during the project period " +
-                            project.getStartDate() + " - " + project.getPlannedEndDate()
+                            project.getStartDate() + " - " +
+                            project.getPlannedEndDate()
             );
         }
 
-        boolean qualified = projectService.isEmployeeQualified(qualificationId, employeeId);
+        boolean qualified =
+                projectService.isEmployeeQualified(qualificationId, employeeId);
         if (!qualified) {
             throw new QualificationNotMatchException(
-                    "Employee does not have the required qualification " + qualificationId
+                    "Employee does not have the required qualification " +
+                            qualificationId
             );
         }
 
-        ProjectEntity updatedProject = projectService.addEmployeeToProject(projectId, employeeId);
+        ProjectEntity updatedProject =
+                projectService.addEmployeeToProject(projectId, employeeId);
 
         return projectMapper.mapEntityToGetDto(updatedProject);
     }
 
     @GetMapping("/{id}/employees")
-    public List<EmployeeInfoDto> listEmployeesForProject(@PathVariable("id") long projectId) {
+    public List<EmployeeInfoDto> listEmployeesForProject(
+            @PathVariable("id") long projectId) {
         try {
             return projectService.listAllEmployeesForProject(projectId);
         } catch (ProjectNotFoundException ex) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage());
         }
     }
+
 
 }

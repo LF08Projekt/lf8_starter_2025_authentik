@@ -116,4 +116,22 @@ public interface ProjectControllerOpenAPI {
             @ApiResponse(responseCode = "401", description = "not authorized",
                     content = @Content)})
     List<EmployeeInfoDto> listEmployeesForProject(long projectId);
+
+    @Operation(
+            summary = "Lists all projects assigned to a specific employee",
+            description = "Returns a list of all projects in which the specified employee is currently involved.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Projects for employee listed successfully",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ProjectGetDto.class))}),
+            @ApiResponse(responseCode = "404",
+                    description = "Employee not found or no projects assigned",
+                    content = @Content),
+            @ApiResponse(responseCode = "401",
+                    description = "Not authorized",
+                    content = @Content)
+    })
+    List<ProjectGetDto> findAllProjectsOfEmployee(long employeeId);
+
 }

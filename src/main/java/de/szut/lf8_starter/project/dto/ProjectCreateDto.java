@@ -28,6 +28,4 @@ public class ProjectCreateDto {
 
     @NotNull(message = "PlannedEndDate is mandatory!")
     private LocalDate plannedEndDate;
-
-    private LocalDate actualEndDate;
 }
