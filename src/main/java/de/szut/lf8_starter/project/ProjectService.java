@@ -61,7 +61,25 @@ public class ProjectService {
 
 
     public boolean isEmployeeAvailable(Long projectId, Long employeeId) {
-        // TODO: implementieren wenn das Ticket bearbeitet wurde
+        ProjectEntity newProject = readById(projectId);
+        if (newProject == null) {
+            throw new ProjectNotFoundException("ProjectEntity not found on id = " + projectId);
+        }
+        List<ProjectEntity> employeeProjects = listAllProjectsForEmployee(employeeId);
+        if (employeeProjects.isEmpty()) {
+            return true;
+        }
+        for (ProjectEntity existingProject : employeeProjects) {
+            if (existingProject.getProjectId().equals(projectId)) {
+                continue;
+            }
+            boolean overlaps = !newProject.getPlannedEndDate().isBefore(existingProject.getStartDate()) &&
+                    !newProject.getStartDate().isAfter(existingProject.getPlannedEndDate());
+            if (overlaps) {
+                return false;
+            }
+        }
+
         return true;
     }
 
@@ -109,7 +127,6 @@ public class ProjectService {
         }
 
 
-
         List<Long> employeeIds = existingProject.getProjectEmployeesIds();
         if (!employeeIds.contains(employeeId)) {
             throw new EmployeeNotFoundException("The employee with id" + employeeId + " is not working on this project.");
@@ -139,17 +156,17 @@ public class ProjectService {
                 .toList();
     }
 
-    public List<ProjectEntity> listAllProjectsForEmployee(Long employeeId){
+    public List<ProjectEntity> listAllProjectsForEmployee(Long employeeId) {
         List<ProjectEntity> allProjectsOfEmployee = new ArrayList<>();
         List<ProjectEntity> completeProjectList = readAll();
         Long currentProjectId;
         List<Long> employeeIdList;
-        for (int i = 0; completeProjectList.size() > i; i++){
+        for (int i = 0; completeProjectList.size() > i; i++) {
             currentProjectId = completeProjectList.get(i).getProjectId();
             employeeIdList =
                     readById(currentProjectId).getProjectEmployeesIds();
-            for(int j = 0; employeeIdList.size() > j; j++){
-                if(employeeIdList.get(j).equals(employeeId)){
+            for (int j = 0; employeeIdList.size() > j; j++) {
+                if (employeeIdList.get(j).equals(employeeId)) {
                     allProjectsOfEmployee.add(readById(currentProjectId));
                 }
             }

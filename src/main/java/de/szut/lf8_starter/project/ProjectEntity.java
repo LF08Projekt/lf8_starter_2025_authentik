@@ -34,7 +34,7 @@ public class ProjectEntity {
 
     private String comment;
 
-    @NotBlank(message = "Start date is mandatory!")
+    @NotNull(message = "Start date is mandatory!")
     private LocalDate startDate;
 
     @NotNull(message = "End date is mandatory!")
