@@ -2,10 +2,7 @@ package de.szut.lf8_starter.project;
 
 import de.szut.lf8_starter.employee.EmployeeService;
 import de.szut.lf8_starter.employee.dto.EmployeeInfoDto;
-import de.szut.lf8_starter.exceptionHandling.EmployeeNotAvailableException;
-import de.szut.lf8_starter.exceptionHandling.EmployeeNotFoundException;
-import de.szut.lf8_starter.exceptionHandling.ProjectNotFoundException;
-import de.szut.lf8_starter.exceptionHandling.QualificationNotMatchException;
+import de.szut.lf8_starter.exceptionHandling.*;
 import de.szut.lf8_starter.project.dto.ProjectCreateDto;
 import de.szut.lf8_starter.project.dto.ProjectGetDto;
 import de.szut.lf8_starter.project.dto.ProjectUpdateDto;
@@ -146,6 +143,13 @@ public class ProjectController implements ProjectControllerOpenAPI {
         if (!employeeValid) {
             throw new EmployeeNotFoundException(
                     "Employee with ID = " + employeeId + " not found.");
+        }
+
+        boolean duplicate =
+                projectService.isEmployeeAlreadyInProject(employeeId, projectId);
+        if(!duplicate){
+            throw new EmployeeAlreadyInProject("Employee is already existing " +
+                    "in this project");
         }
 
         boolean available =
