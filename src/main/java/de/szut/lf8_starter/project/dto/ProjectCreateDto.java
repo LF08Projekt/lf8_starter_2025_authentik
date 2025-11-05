@@ -23,7 +23,7 @@ public class ProjectCreateDto {
     @NotBlank(message = "Comment cannot be empty!")
     private String comment;
 
-    @NotNull(message ="Startdate is mandatory!")
+    @NotNull(message = "Startdate is mandatory!")
     private LocalDate startDate;
 
     @NotNull(message = "PlannedEndDate is mandatory!")

@@ -147,7 +147,7 @@ public class ProjectController implements ProjectControllerOpenAPI {
 
         boolean duplicate =
                 projectService.isEmployeeAlreadyInProject(employeeId, projectId);
-        if(!duplicate){
+        if (!duplicate) {
             throw new EmployeeAlreadyInProject("Employee is already existing " +
                     "in this project");
         }
@@ -194,6 +194,4 @@ public class ProjectController implements ProjectControllerOpenAPI {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage());
         }
     }
-
-
 }

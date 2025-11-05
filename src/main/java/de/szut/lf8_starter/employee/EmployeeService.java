@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Objects;
+
 @Data
 @Service
 public class EmployeeService {
@@ -20,7 +22,7 @@ public class EmployeeService {
 
     public EmployeeDto getById(Long employeeId) {
         HttpHeaders headers = new HttpHeaders();
-        headers.setBearerAuth(AuthenticationService.getCurrentJWT());
+        headers.setBearerAuth(Objects.requireNonNull(AuthenticationService.getCurrentJWT()));
         HttpEntity<Void> entity = new HttpEntity<>(headers);
 
         String url = baseUrl + "/employees/" + employeeId;
@@ -47,7 +49,7 @@ public class EmployeeService {
 
     public EmployeeInfoDto getEmployeeInfoById(Long employeeId) {
         HttpHeaders headers = new HttpHeaders();
-        headers.setBearerAuth(AuthenticationService.getCurrentJWT());
+        headers.setBearerAuth(Objects.requireNonNull(AuthenticationService.getCurrentJWT()));
         HttpEntity<Void> entity = new HttpEntity<>(headers);
 
         String url = baseUrl + "/employees/" + employeeId;
@@ -74,7 +76,7 @@ public class EmployeeService {
 
     private HttpEntity<Void> getHttpEntityWithToken() {
         HttpHeaders headers = new HttpHeaders();
-        headers.setBearerAuth(AuthenticationService.getCurrentJWT());
+        headers.setBearerAuth(Objects.requireNonNull(AuthenticationService.getCurrentJWT()));
         return new HttpEntity<>(headers);
     }
 
@@ -93,10 +95,7 @@ public class EmployeeService {
         } catch (HttpClientErrorException.NotFound exception) {
             return false;
         }
-
-
     }
-
 }
 
 

@@ -23,8 +23,8 @@ public class DeleteIT extends AbstractIntegrationTest {
         ProjectEntity project = projectRepository.save(new ProjectEntity());
 
         this.mockMvc.perform(
-                delete("/projects/" +
-                        project.getProjectId()).with(csrf()))
+                        delete("/projects/" +
+                                project.getProjectId()).with(csrf()))
                 .andExpect(status().isOk());
         assertThat(projectRepository.findById(project.getProjectId()).isPresent()).isFalse();
     }
@@ -34,7 +34,7 @@ public class DeleteIT extends AbstractIntegrationTest {
     void deleteProject() throws Exception {
         this.mockMvc.perform(delete("/projects" +
                         "/9876")
-                .with(csrf()))
+                        .with(csrf()))
                 .andExpect(content().string(containsString("ProjectEntity " +
                         "not found on id = 9876")))
                 .andExpect(status().isNotFound());

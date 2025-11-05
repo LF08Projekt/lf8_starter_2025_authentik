@@ -161,12 +161,12 @@ public class ProjectService {
         List<ProjectEntity> completeProjectList = readAll();
         Long currentProjectId;
         List<Long> employeeIdList;
-        for (int i = 0; completeProjectList.size() > i; i++) {
-            currentProjectId = completeProjectList.get(i).getProjectId();
+        for (ProjectEntity projectEntity : completeProjectList) {
+            currentProjectId = projectEntity.getProjectId();
             employeeIdList =
                     readById(currentProjectId).getProjectEmployeesIds();
-            for (int j = 0; employeeIdList.size() > j; j++) {
-                if (employeeIdList.get(j).equals(employeeId)) {
+            for (Long aLong : employeeIdList) {
+                if (aLong.equals(employeeId)) {
                     allProjectsOfEmployee.add(readById(currentProjectId));
                 }
             }
@@ -174,7 +174,7 @@ public class ProjectService {
         return allProjectsOfEmployee;
     }
 
-    public boolean isEmployeeAlreadyInProject(long employeeId, long projectId){
+    public boolean isEmployeeAlreadyInProject(long employeeId, long projectId) {
         var project = readById(projectId);
         var employeeList = project.getProjectEmployeesIds();
         for (Long aLong : employeeList) {
