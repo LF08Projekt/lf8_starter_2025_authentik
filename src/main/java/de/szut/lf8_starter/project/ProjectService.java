@@ -134,8 +134,7 @@ public class ProjectService {
         List<Long> employeeIds = existingProject.getProjectEmployeesIds();
 
         return employeeIds.stream()
-                .map(employeeService::getEmployeeInfoById) // Holt
-                // EmployeeInfoDto
+                .map(employeeService::getEmployeeInfoById)
                 .filter(Objects::nonNull)
                 .toList();
     }
