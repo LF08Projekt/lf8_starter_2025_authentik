@@ -28,7 +28,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class ProjectControllerIntegrationTest {
+class AllProjectsOfEmployeeIT {
 
     @Autowired
     private MockMvc mockMvc;

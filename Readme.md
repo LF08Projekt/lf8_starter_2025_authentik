@@ -54,3 +54,6 @@ Um einen JWT Token zu generieren, der für die Authentifizierung benötigt wird,
 1. Auf der Projektebene [GetBearerToken.http](GetBearerToken.http) öffnen.
 2. Neben der Request auf den grünen Pfeil drücken
 3. Aus dem Reponse das access_token kopieren
+
+### Für Schwer
+In der Datei testJWT.http stehen bearertokens hardcoded weil ich(armin) immernoch keinen generieren konnte.

@@ -61,6 +61,7 @@ public class ProjectService {
 
 
     public boolean isEmployeeAvailable(Long projectId, Long employeeId) {
+
         ProjectEntity newProject = readById(projectId);
         if (newProject == null) {
             throw new ProjectNotFoundException("ProjectEntity not found on id = " + projectId);
