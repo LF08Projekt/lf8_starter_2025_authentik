@@ -157,4 +157,15 @@ public class ProjectService {
         }
         return allProjectsOfEmployee;
     }
+
+    public boolean isEmployeeAlreadyInProject(long employeeId, long projectId){
+        var project = readById(projectId);
+        var employeeList = project.getProjectEmployeesIds();
+        for (Long aLong : employeeList) {
+            if (aLong == employeeId) {
+                return false;
+            }
+        }
+        return true;
+    }
 }
