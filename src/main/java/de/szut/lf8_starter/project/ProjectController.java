@@ -9,7 +9,6 @@ import de.szut.lf8_starter.project.dto.ProjectUpdateDto;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -39,11 +38,8 @@ public class ProjectController implements ProjectControllerOpenAPI {
             throw new EmployeeNotFoundException("Employee with Id " +
                     projectEntity.getResponsibleEmployeeId() + "doesnt exist");
         }
-        try {
-            projectEntity = this.projectService.create(projectEntity);
-        } catch (EmployeeNotFoundException exception) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, exception.getMessage());
-        }
+
+        projectEntity = this.projectService.create(projectEntity);
 
         return this.projectMapper.mapEntityToGetDto(projectEntity);
     }
@@ -76,17 +72,13 @@ public class ProjectController implements ProjectControllerOpenAPI {
             throw new EmployeeNotFoundException("Employee with Id " +
                     projectEntity.getResponsibleEmployeeId() + "doesnt exist");
         }
-        try {
-            ProjectEntity updatedProjectEntity =
-                    projectMapper.mapUpdateDtoToEntity(projectUpdateDto,
-                            projectId);
-            ProjectEntity finalProjectEntity =
-                    projectService.update(projectId, updatedProjectEntity);
-            return projectMapper.mapEntityToGetDto(finalProjectEntity);
-        } catch (ProjectNotFoundException exception) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,
-                    exception.getMessage());
-        }
+        ProjectEntity updatedProjectEntity =
+                projectMapper.mapUpdateDtoToEntity(projectUpdateDto,
+                        projectId);
+        ProjectEntity finalProjectEntity =
+                projectService.update(projectId, updatedProjectEntity);
+        return projectMapper.mapEntityToGetDto(finalProjectEntity);
+
     }
 
     @GetMapping
@@ -147,7 +139,7 @@ public class ProjectController implements ProjectControllerOpenAPI {
 
         boolean duplicate =
                 projectService.isEmployeeAlreadyInProject(employeeId, projectId);
-        if(!duplicate){
+        if (!duplicate) {
             throw new EmployeeAlreadyInProject("Employee is already existing " +
                     "in this project");
         }
@@ -188,11 +180,9 @@ public class ProjectController implements ProjectControllerOpenAPI {
     @GetMapping("/{id}/employees")
     public List<EmployeeInfoDto> listEmployeesForProject(
             @PathVariable("id") long projectId) {
-        try {
-            return projectService.listAllEmployeesForProject(projectId);
-        } catch (ProjectNotFoundException ex) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage());
-        }
+
+        return projectService.listAllEmployeesForProject(projectId);
+
     }
 
 
