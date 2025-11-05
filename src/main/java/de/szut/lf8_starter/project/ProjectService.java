@@ -2,6 +2,7 @@ package de.szut.lf8_starter.project;
 
 import de.szut.lf8_starter.employee.EmployeeService;
 import de.szut.lf8_starter.employee.dto.EmployeeInfoDto;
+import de.szut.lf8_starter.exceptionHandling.EmployeeNotFoundException;
 import de.szut.lf8_starter.exceptionHandling.ProjectNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -88,6 +89,34 @@ public class ProjectService {
 
         final List<Long> employeeIds = existingProject.getProjectEmployeesIds();
         employeeIds.add(employeeId);
+        existingProject.setProjectEmployeesIds(employeeIds);
+
+        return projectRepository.save(existingProject);
+    }
+
+    public ProjectEntity removeEmployeeFromProject(Long projectId, Long employeeId) {
+
+        var optProject = projectRepository.findById(projectId);
+        if (optProject.isEmpty()) {
+            throw new ProjectNotFoundException("ProjectEntity not found on id = " + projectId);
+        }
+        var existingProject = optProject.get();
+
+
+        boolean employeeIsValid = employeeService.isEmployeeIdValid(employeeId);
+        if (!employeeIsValid) {
+            throw new EmployeeNotFoundException("Employee not found on id = " + employeeId);
+        }
+
+
+
+        List<Long> employeeIds = existingProject.getProjectEmployeesIds();
+        if (!employeeIds.contains(employeeId)) {
+            throw new EmployeeNotFoundException("The employee with id" + employeeId + " is not working on this project.");
+        }
+
+
+        employeeIds.remove(employeeId);
         existingProject.setProjectEmployeesIds(employeeIds);
 
         return projectRepository.save(existingProject);

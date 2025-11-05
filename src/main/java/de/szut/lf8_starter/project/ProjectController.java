@@ -173,6 +173,14 @@ public class ProjectController implements ProjectControllerOpenAPI {
         return projectMapper.mapEntityToGetDto(updatedProject);
     }
 
+    @DeleteMapping("/{projectId}/remove/{employeeId}")
+    @ResponseStatus(HttpStatus.OK)
+    public ProjectGetDto removeEmployeeFromProject(@PathVariable("projectId") long projectId, @PathVariable("employeeId") long employeeId) {
+
+        ProjectEntity updated = projectService.removeEmployeeFromProject(projectId, employeeId);
+        return projectMapper.mapEntityToGetDto(updated);
+    }
+
     @GetMapping("/{id}/employees")
     public List<EmployeeInfoDto> listEmployeesForProject(
             @PathVariable("id") long projectId) {

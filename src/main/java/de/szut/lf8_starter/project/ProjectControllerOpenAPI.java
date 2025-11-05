@@ -1,7 +1,6 @@
 package de.szut.lf8_starter.project;
 
 import de.szut.lf8_starter.employee.dto.EmployeeInfoDto;
-import de.szut.lf8_starter.project.dto.ProjectAddEmployeeDto;
 import de.szut.lf8_starter.project.dto.ProjectCreateDto;
 import de.szut.lf8_starter.project.dto.ProjectGetDto;
 import de.szut.lf8_starter.project.dto.ProjectUpdateDto;
@@ -10,8 +9,6 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import org.springframework.web.bind.annotation.PathVariable;
-
 import java.util.List;
 
 public interface ProjectControllerOpenAPI {
@@ -134,4 +131,14 @@ public interface ProjectControllerOpenAPI {
     })
     List<ProjectGetDto> findAllProjectsOfEmployee(long employeeId);
 
+
+    @Operation(summary = "Removes an employee from a project")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Employee removed from project successfully",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ProjectGetDto.class))}),
+            @ApiResponse(responseCode = "404", description = "Project or Employee not found", content = @Content),
+            @ApiResponse(responseCode = "401", description = "not authorized", content = @Content)
+    })
+    ProjectGetDto removeEmployeeFromProject(long projectId, long employeeId);
 }

@@ -1,10 +1,10 @@
 package de.szut.lf8_starter.employee;
 
 import de.szut.lf8_starter.employee.dto.EmployeeDto;
+import de.szut.lf8_starter.employee.dto.EmployeeInfoDto;
 import de.szut.lf8_starter.security.AuthenticationService;
 import lombok.Data;
 import org.springframework.http.*;
-import de.szut.lf8_starter.employee.dto.EmployeeInfoDto;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
