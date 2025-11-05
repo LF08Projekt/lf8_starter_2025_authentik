@@ -184,6 +184,4 @@ public class ProjectController implements ProjectControllerOpenAPI {
         return projectService.listAllEmployeesForProject(projectId);
 
     }
-
-
 }

@@ -12,7 +12,7 @@ public class AuthenticationService {
     public static String getCurrentJWT() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        if(authentication instanceof JwtAuthenticationToken jwtAuthenticationToken) {
+        if (authentication instanceof JwtAuthenticationToken jwtAuthenticationToken) {
             Jwt jwt = jwtAuthenticationToken.getToken();
             return jwt.getTokenValue();
         }

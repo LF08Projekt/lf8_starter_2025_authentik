@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 
 import java.time.LocalDate;
-import java.time.ZoneId;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -33,7 +32,7 @@ public class PostIT extends AbstractIntegrationTest {
 
         final var projectAsString = this.mockMvc.perform(
                         post("/projects")
-                                .with(jwt()) // falls Security aktiv
+                                .with(jwt())
                                 .content(project)
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())

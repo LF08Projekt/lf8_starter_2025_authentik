@@ -66,7 +66,6 @@ public class AddEmployeeToProjectIT extends AbstractIntegrationTest {
 
         verify(employeeService).isEmployeeIdValid(employeeId);
         verify(employeeService).getById(employeeId);
-
     }
 
     @Test
@@ -82,7 +81,6 @@ public class AddEmployeeToProjectIT extends AbstractIntegrationTest {
                         .with(jwt())
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
-
     }
 
     @Test
@@ -103,6 +101,5 @@ public class AddEmployeeToProjectIT extends AbstractIntegrationTest {
                         .with(jwt())
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
-
     }
 }

@@ -1,14 +1,10 @@
 package de.szut.lf8_starter.project;
 
-import de.szut.lf8_starter.employee.dto.EmployeeDto;
-import de.szut.lf8_starter.employee.dto.EmployeeInfoDto;
-import de.szut.lf8_starter.project.dto.ProjectAddEmployeeDto;
 import de.szut.lf8_starter.project.dto.ProjectCreateDto;
 import de.szut.lf8_starter.project.dto.ProjectGetDto;
 import de.szut.lf8_starter.project.dto.ProjectUpdateDto;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 
 @Service
 public class ProjectMapper {
@@ -52,13 +48,5 @@ public class ProjectMapper {
         projectToUpdate.setActualEndDate(updateDto.getActualEndDate());
         projectToUpdate.setComment(updateDto.getComment());
         return projectToUpdate;
-    }
-
-    public ProjectEntity mapProjectAddEmployeeDtoToEntity(ProjectAddEmployeeDto projectAddEmployeeDto, ProjectEntity projectEntityToUpdate) {
-        Long employeeToAdd = projectAddEmployeeDto.getNewEmployeeId();
-        List<Long> employeeIds = projectEntityToUpdate.getProjectEmployeesIds();
-        employeeIds.add(employeeToAdd);
-        projectEntityToUpdate.setProjectEmployeesIds(employeeIds);
-        return projectEntityToUpdate;
     }
 }

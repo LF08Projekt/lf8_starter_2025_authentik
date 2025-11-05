@@ -1,6 +1,5 @@
 package de.szut.lf8_starter.Integrationstests.project;
 
-
 import de.szut.lf8_starter.testcontainers.AbstractIntegrationTest;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
@@ -34,7 +33,7 @@ public class UpdateIT extends AbstractIntegrationTest {
 
         var response = this.mockMvc.perform(
                         post("/projects")
-                                .with(jwt()) // falls Security aktiv
+                                .with(jwt())
                                 .content(project)
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())

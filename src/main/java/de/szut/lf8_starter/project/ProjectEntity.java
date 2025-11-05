@@ -44,6 +44,4 @@ public class ProjectEntity {
 
     @ElementCollection
     private List<Long> projectEmployeesIds;
-
-
 }

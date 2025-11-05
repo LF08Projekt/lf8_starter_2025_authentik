@@ -42,11 +42,13 @@ public class GlobalExceptionHandler {
                 ex.getMessage(), request.getDescription(false));
         return new ResponseEntity<>(errorDetails, HttpStatus.CONFLICT);
     }
+
     @ExceptionHandler(EmployeeNotAvailableException.class)
     public ResponseEntity<?> handleEmployeeNotAvailable(EmployeeNotAvailableException ex, WebRequest request) {
         ErrorDetails errorDetails = new ErrorDetails(new Date(), ex.getMessage(), request.getDescription(false));
         return new ResponseEntity<>(errorDetails, HttpStatus.CONFLICT);
     }
+
     @ExceptionHandler(QualificationNotMatchException.class)
     public ResponseEntity<?> handleQualificationNotMatch(QualificationNotMatchException ex, WebRequest request) {
         ErrorDetails errorDetails = new ErrorDetails(new Date(), ex.getMessage(), request.getDescription(false));
