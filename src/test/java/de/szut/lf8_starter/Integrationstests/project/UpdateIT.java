@@ -1,24 +1,32 @@
 package de.szut.lf8_starter.Integrationstests.project;
 
+import de.szut.lf8_starter.employee.EmployeeService;
 import de.szut.lf8_starter.testcontainers.AbstractIntegrationTest;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 public class UpdateIT extends AbstractIntegrationTest {
+
+    @MockBean
+    private EmployeeService employeeService;
+
     @Test
-    @WithMockUser(roles = "user")
     void updateProjectSuccess() throws Exception {
+        when(employeeService.isEmployeeIdValid(eq(1L))).thenReturn(true);
+        when(employeeService.isEmployeeIdValid(eq(2L))).thenReturn(true);
+
         String project = """
                 {
                   "name": "TestProject",
@@ -39,10 +47,8 @@ public class UpdateIT extends AbstractIntegrationTest {
                 .andExpect(status().isCreated())
                 .andReturn();
 
-        String createdBody = response.getResponse().getContentAsString();
         final var id =
-                Long.parseLong(new JSONObject(createdBody).get("projectId").toString());
-
+                Long.parseLong(new JSONObject(response.getResponse().getContentAsString()).get("projectId").toString());
 
         String updatedProject = """
                 {
@@ -69,14 +75,13 @@ public class UpdateIT extends AbstractIntegrationTest {
                 .andExpect(jsonPath("$.comment", is("nichts")))
                 .andExpect(jsonPath("$.startDate", is("2025-12-10")))
                 .andExpect(jsonPath("$.plannedEndDate", is("2027-12-13")))
-                .andExpect(jsonPath("$.actualEndDate", is("2025-12-14")))
-                .andReturn();
+                .andExpect(jsonPath("$.actualEndDate", is("2025-12-14")));
     }
 
-
     @Test
-    @WithMockUser(roles = "user")
     void updateProjectNotFoundWithWrongId() throws Exception {
+        when(employeeService.isEmployeeIdValid(eq(2L))).thenReturn(true);
+
         String updatedProject = """
                 {
                   "name": "DoesNotExist",
@@ -92,12 +97,10 @@ public class UpdateIT extends AbstractIntegrationTest {
 
         this.mockMvc.perform(put("/projects/9876")
                         .with(jwt())
-                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(updatedProject))
                 .andExpect(status().isNotFound())
-                .andExpect(status().reason(containsString("ProjectEntity not found on id = 9876")));
+                .andExpect(jsonPath("$.message",
+                        containsString("ProjectEntity not found on id = 9876")));
     }
 }
-
-
